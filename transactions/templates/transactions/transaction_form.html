@@ -1,0 +1,113 @@
+{% extends 'transactions/base.html' %}
+
+{% block title %}{% if form.instance.pk %}Редактирование транзакции{% else %}Добавление транзакции{% endif %} - ДДС{% endblock %}
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>{% if form.instance.pk %}Редактирование транзакции{% else %}Добавление транзакции{% endif %}</h1>
+        <a href="{% url 'transaction_list' %}" class="btn btn-secondary">Назад</a>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    {{ form.created_at.label_tag }}
+                    {{ form.created_at }}
+                    {% if form.created_at.errors %}
+                        <div class="text-danger">{{ form.created_at.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    {{ form.status.label_tag }}
+                    {{ form.status }}
+                    {% if form.status.errors %}
+                        <div class="text-danger">{{ form.status.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    {{ form.transaction_type.label_tag }}
+                    {{ form.transaction_type }}
+                    {% if form.transaction_type.errors %}
+                        <div class="text-danger">{{ form.transaction_type.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    {{ form.category.label_tag }}
+                    {{ form.category }}
+                    {% if form.category.errors %}
+                        <div class="text-danger">{{ form.category.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    {{ form.subcategory.label_tag }}
+                    {{ form.subcategory }}
+                    {% if form.subcategory.errors %}
+                        <div class="text-danger">{{ form.subcategory.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    {{ form.amount.label_tag }}
+                    {{ form.amount }}
+                    {% if form.amount.errors %}
+                        <div class="text-danger">{{ form.amount.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    {{ form.comment.label_tag }}
+                    {{ form.comment }}
+                    {% if form.comment.errors %}
+                        <div class="text-danger">{{ form.comment.errors }}</div>
+                    {% endif %}
+                </div>
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        const transactionTypeSelect = document.getElementById('id_transaction_type');
+        const categorySelect = document.getElementById('id_category');
+        const subcategorySelect = document.getElementById('id_subcategory');
+
+        transactionTypeSelect.addEventListener('change', function() {
+            const transactionTypeId = this.value;
+            categorySelect.innerHTML = '<option value="">Выберите категорию</option>';
+            subcategorySelect.innerHTML = '<option value="">Выберите подкатегорию</option>';
+
+            if (transactionTypeId) {
+                fetch(`/get-categories/${transactionTypeId}/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.categories.forEach(category => {
+                            const option = document.createElement('option');
+                            option.value = category.id;
+                            option.textContent = category.name;
+                            categorySelect.appendChild(option);
+                        });
+                    });
+            }
+        });
+
+        categorySelect.addEventListener('change', function() {
+            const categoryId = this.value;
+            subcategorySelect.innerHTML = '<option value="">Выберите подкатегорию</option>';
+
+            if (categoryId) {
+                fetch(`/get-subcategories/${categoryId}/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.subcategories.forEach(subcategory => {
+                            const option = document.createElement('option');
+                            option.value = subcategory.id;
+                            option.textContent = subcategory.name;
+                            subcategorySelect.appendChild(option);
+                        });
+                    });
+            }
+        });
+    </script>
+{% endblock %}

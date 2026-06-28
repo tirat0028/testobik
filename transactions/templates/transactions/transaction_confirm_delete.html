@@ -1,0 +1,21 @@
+{% extends 'transactions/base.html' %}
+
+{% block title %}Удаление транзакции - ДДС{% endblock %}
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Удаление транзакции</h1>
+        <a href="{% url 'transaction_list' %}" class="btn btn-secondary">Назад</a>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <p>Вы уверены, что хотите удалить транзакцию "{{ transaction }}"?</p>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Удалить</button>
+                <a href="{% url 'transaction_list' %}" class="btn btn-secondary">Отмена</a>
+            </form>
+        </div>
+    </div>
+{% endblock %}

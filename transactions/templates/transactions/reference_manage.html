@@ -1,0 +1,92 @@
+{% extends 'transactions/base.html' %}
+
+{% block title %}Справочники - ДДС{% endblock %}
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Справочники</h1>
+        <a href="{% url 'transaction_list' %}" class="btn btn-secondary">Назад</a>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    Статусы
+                </div>
+                <div class="card-body">
+                    <ul class="list-group mb-3">
+                        {% for status in statuses %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{ status.name }}
+                            </li>
+                        {% empty %}
+                            <li class="list-group-item text-center">Нет статусов</li>
+                        {% endfor %}
+                    </ul>
+                    <p class="text-muted">Для управления статусами используйте <a href="/admin/transactions/status/">админ-панель</a></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    Типы транзакций
+                </div>
+                <div class="card-body">
+                    <ul class="list-group mb-3">
+                        {% for type in types %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{ type.name }}
+                            </li>
+                        {% empty %}
+                            <li class="list-group-item text-center">Нет типов</li>
+                        {% endfor %}
+                    </ul>
+                    <p class="text-muted">Для управления типами используйте <a href="/admin/transactions/transactiontype/">админ-панель</a></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    Категории
+                </div>
+                <div class="card-body">
+                    <ul class="list-group mb-3">
+                        {% for category in categories %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{ category.name }} ({{ category.transaction_type.name }})
+                            </li>
+                        {% empty %}
+                            <li class="list-group-item text-center">Нет категорий</li>
+                        {% endfor %}
+                    </ul>
+                    <p class="text-muted">Для управления категориями используйте <a href="/admin/transactions/category/">админ-панель</a></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    Подкатегории
+                </div>
+                <div class="card-body">
+                    <ul class="list-group mb-3">
+                        {% for subcategory in subcategories %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{ subcategory.name }} ({{ subcategory.category.name }})
+                            </li>
+                        {% empty %}
+                            <li class="list-group-item text-center">Нет подкатегорий</li>
+                        {% endfor %}
+                    </ul>
+                    <p class="text-muted">Для управления подкатегориями используйте <a href="/admin/transactions/subcategory/">админ-панель</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
